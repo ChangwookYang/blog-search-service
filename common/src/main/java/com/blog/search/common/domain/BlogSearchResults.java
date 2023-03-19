@@ -1,33 +1,52 @@
 package com.blog.search.common.domain;
 
-import lombok.AllArgsConstructor;
+import com.blog.search.common.type.ApiType;
+import com.blog.search.common.type.SearchType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+@ToString
+@Table(indexes = {
+        @Index(columnList = "keyword")
+})
+@EntityListeners(AuditingEntityListener.class)
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class BlogSearchResults {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter @Column(nullable = false, length = 50)
     private String keyword;
-    private Long searchCount;
+    @Setter @Column(nullable = false, columnDefinition = "json")
+    private String searchResult;
+    @Setter @Column(nullable = false, length = 10) @Enumerated(EnumType.STRING)
+    private SearchType searchType;
+    @Setter @Column(nullable = false, length = 10) @Enumerated(EnumType.STRING)
+    private ApiType apiType;
 
-    @CreatedDate
+    @CreatedDate @Column(nullable = false)
     private LocalDateTime createdDt;
-    @LastModifiedDate
+    @LastModifiedDate @Column(nullable = false)
     private LocalDateTime updatedDt;
+
+    protected BlogSearchResults() {}
+
+    private BlogSearchResults(String keyword, String searchResult) {
+        this.keyword = keyword;
+        this.searchResult = searchResult;
+    }
+
+    public static BlogSearchResults of(String keyword, String searchResult) {
+        return new BlogSearchResults(keyword, searchResult);
+    }
 }
+
