@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BlogSearchResultsRepository extends JpaRepository<BlogSearchResults, Long> {
+
+    BlogSearchResults findByKeyword(String keyword);
 }
