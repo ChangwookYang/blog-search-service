@@ -40,13 +40,15 @@ public class BlogSearchResults {
 
     protected BlogSearchResults() {}
 
-    private BlogSearchResults(String keyword, String searchResult) {
+    private BlogSearchResults(String keyword, String searchResult, SearchType searchType, ApiType apiType) {
         this.keyword = keyword;
         this.searchResult = searchResult;
+        this.searchType = searchType;
+        this.apiType = apiType;
     }
 
-    public static BlogSearchResults of(String keyword, String searchResult) {
-        return new BlogSearchResults(keyword, searchResult);
+    public static BlogSearchResults of(String keyword, String searchResult, SearchType searchType, ApiType apiType) {
+        return new BlogSearchResults(keyword, searchResult, searchType, apiType);
     }
 }
 
