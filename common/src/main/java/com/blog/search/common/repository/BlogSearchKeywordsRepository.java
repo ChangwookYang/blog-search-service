@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface BlogSearchKeywordsRepository extends JpaRepository<BlogSearchKeywords, Long> {
 
-    Long findByKeyword(String keyword);
+    BlogSearchKeywords findByKeyword(String keyword);
 
     List<BlogSearchKeywords> findTop10ByOrderBySearchCountDesc();
 }

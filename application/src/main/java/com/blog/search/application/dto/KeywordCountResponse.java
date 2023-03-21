@@ -12,10 +12,6 @@ public class KeywordCountResponse {
     String keyword;
     Long searchCount;
 
-    public static KeywordCountResponse of(String keyword, Long searchCount) {
-        return new KeywordCountResponse(keyword, searchCount);
-    }
-
     public static KeywordCountResponse from(BlogSearchKeywords entity) {
         return new KeywordCountResponse(entity.getKeyword(), entity.getSearchCount());
     }

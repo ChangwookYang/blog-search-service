@@ -3,6 +3,7 @@ package com.blog.search.application.controller;
 import com.blog.search.application.dto.KeywordCountResponse;
 import com.blog.search.application.service.BlogSearchCountService;
 import com.blog.search.application.service.BlogSearchService;
+import com.blog.search.common.exception.ApiRuntimeException;
 import com.blog.search.common.type.SortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,19 +24,15 @@ public class BlogSearchController {
 
     @GetMapping("/api/search")
     public ResponseEntity<Object> searchBlogs(
-            @RequestParam String keyword,
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "ACCURACY") SortType sortType,
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "10") int pageSize
     ) throws Exception {
-        setSearchCount(keyword);
-        return new ResponseEntity<>(blogSearchService.searchBlogs(keyword, sortType, pageNumber, pageSize), HttpStatus.OK);
-    }
+        if (keyword == null) throw new ApiRuntimeException(HttpStatus.BAD_REQUEST, "Keyword is null");
 
-    private Long setSearchCount(String keyword) {
-        // TODO redis 업데이트
-        blogSearchCountService.getKeywordSearchCount(keyword);
-        return 0L;
+        blogSearchCountService.setKeywordSearchCount(keyword);
+        return new ResponseEntity<>(blogSearchService.searchBlogs(keyword, sortType, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/api/popular")
