@@ -36,3 +36,19 @@ naver:
 spring:
   config.activate.on-profile: test
   datasource.url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto:
+    show-sql: true
+kakao:
+  rest:
+    api:
+      key: ${KAKAO_REST_API_KEY}
+      url: https://dapi.kakao.com/v2/search/blog
+
+naver:
+  rest:
+    api:
+      client-id: ${NAVER_REST_API_CLIENT_ID}
+      client-secret: ${NAVER_REST_API_CLIENT_SECRET}
+      url: https://openapi.naver.com/v1/search/blog.json
