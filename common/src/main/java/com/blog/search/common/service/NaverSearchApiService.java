@@ -62,6 +62,7 @@ public class NaverSearchApiService implements BlogSearchApiInterface<SearchListR
                     , new HttpEntity<>(headers), NaverSearchResponse.class).getBody();
             return SearchListResponse.of(
                     response.getItemList().stream().map(SearchApiResponse::of).collect(Collectors.toList()),
+                    ApiType.NAVER,
                     response.getTotal(), request.getPageNumber(), request.getPageSize(),
                     isEndPage(response.getTotal(), start, request.getPageSize()), request.getSortType()
             );

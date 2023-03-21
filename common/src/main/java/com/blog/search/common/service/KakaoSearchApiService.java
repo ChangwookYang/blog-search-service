@@ -57,6 +57,7 @@ public class KakaoSearchApiService implements BlogSearchApiInterface<KakaoSearch
 
             return SearchListResponse.of(
                     response.getDocumentList().stream().map(SearchApiResponse::of).collect(Collectors.toList()),
+                    ApiType.KAKAO,
                     response.getMetaDto().getTotalCount(), request.getPageNumber(), request.getPageSize(),
                     response.getMetaDto().getIsEnd(), request.getSortType());
         } catch (HttpClientErrorException ae) {
