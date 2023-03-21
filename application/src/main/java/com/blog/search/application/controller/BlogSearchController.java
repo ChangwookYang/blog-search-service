@@ -21,7 +21,7 @@ public class BlogSearchController {
 
     private final BlogSearchCountService blogSearchCountService;
 
-    @GetMapping("/v1/search/blog/keyword")
+    @GetMapping("/api/search")
     public ResponseEntity<Object> searchBlogs(
             @RequestParam String keyword,
             @RequestParam(required = false, defaultValue = "ACCURACY") SortType sortType,
@@ -38,7 +38,7 @@ public class BlogSearchController {
         return 0L;
     }
 
-    @GetMapping("/v1/search/blog/popular")
+    @GetMapping("/api/popular")
     public ResponseEntity<Object> searchPopularBlogs() {
         List<KeywordCountResponse> top10List = blogSearchCountService.findTop10OrderBySearchCountDesc();
         HttpStatus status = (top10List.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK;
