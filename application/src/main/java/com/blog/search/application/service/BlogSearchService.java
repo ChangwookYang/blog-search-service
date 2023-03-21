@@ -7,6 +7,8 @@ import com.blog.search.common.service.BlogSearchApiServiceFactory;
 import com.blog.search.common.type.ApiType;
 import com.blog.search.common.type.SortType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +16,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BlogSearchService {
 
+    @Retryable(value = {Exception.class}, maxAttempts = 1)
     @Transactional(readOnly = true)
     public SearchListResponse searchBlogs(String keyword, SortType sortType, int pageNumber, int pageSize) throws Exception {
+
         BlogSearchApiInterface<?> blogSearchApiService = BlogSearchApiServiceFactory.getService(ApiType.KAKAO);
 
-        // TODO 에러 발생 시 Naver @Retryable
-        return blogSearchApiService.searchBlogDataFromApi(
-                SearchApiRequest.of(keyword, sortType, pageNumber, pageSize));
+        return blogSearchApiService.searchBlogDataFromApi(SearchApiRequest.of(keyword, sortType, pageNumber, pageSize));
     }
+
+    @Recover
+    @Transactional(readOnly = true)
+    public SearchListResponse searchBlogs(Exception e, String keyword, SortType sortType, int pageNumber, int pageSize) throws Exception {
+
+        BlogSearchApiInterface<?> blogSearchApiService = BlogSearchApiServiceFactory.getService(ApiType.NAVER);
+
+        return blogSearchApiService.searchBlogDataFromApi(SearchApiRequest.of(keyword, sortType, pageNumber, pageSize));
+    }
+
 
 }
