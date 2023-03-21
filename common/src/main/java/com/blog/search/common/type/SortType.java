@@ -1,5 +1,5 @@
 package com.blog.search.common.type;
 
-public enum SearchType {
+public enum SortType {
     ACCURACY, RECENCY
 }
