@@ -27,7 +27,7 @@ public class BlogSearchKeywords {
     @Setter @Column(nullable = false)
     private Long searchCount;
 
-    @CreatedDate @Column(nullable = false)
+    @CreatedDate @Column(nullable = false, updatable = false)
     private LocalDateTime createdDt;
     @LastModifiedDate @Column(nullable = false)
     private LocalDateTime updatedDt;

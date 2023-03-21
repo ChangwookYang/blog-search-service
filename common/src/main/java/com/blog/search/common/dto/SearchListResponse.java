@@ -23,8 +23,8 @@ public class SearchListResponse {
     private SortType sortType;
 
     public static SearchListResponse of(
-            List<SearchApiResponse> result, ApiType apiType, Long totalCount,
-            int page, int size, Boolean IsEndPage, SortType sortType) {
+            List<SearchApiResponse> result, ApiType apiType,
+            Long totalCount, int page, int size, Boolean IsEndPage, SortType sortType) {
         return new SearchListResponse(result, apiType, totalCount, page, size, IsEndPage, sortType);
     }
 }

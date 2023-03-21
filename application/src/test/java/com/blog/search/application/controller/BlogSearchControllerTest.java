@@ -52,9 +52,31 @@ class BlogSearchControllerTest {
                 .andReturn();
     }
 
-    @DisplayName("[GET /api/search] 블로그 검색 - 요청값 400 에러")
+    @DisplayName("[GET /api/search] 블로그 검색 - API 요청값 400 에러")
     @Test
-    public void givenKeywordAndPageSize1000_whenSearchBlogList_thenReturnBlogList() throws Exception {
+    public void givenNothing_whenSearchBlogList_thenReturnBadRequest() throws Exception {
+        // given
+        String keyword = "안녕";
+        String pageNumber = "1";
+        String pageSize = "1000";
+        String sortType = SortType.ACCURACY.toString();
+
+        // when
+        mvc.perform(get("/api/search")
+                        .param("keyword", keyword)
+                        .param("pageNumber", pageNumber)
+                        .param("pageSize", pageSize)
+                        .param("sortType", sortType)
+                )
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andReturn();
+    }
+
+    @DisplayName("[GET /api/search] 블로그 검색 - API 요청값 400 에러")
+    @Test
+    public void givenKeywordAndPageSize1000_whenSearchBlogList_thenReturnBadRequest() throws Exception {
         // given
         String keyword = "안녕";
         String pageNumber = "1";
@@ -125,7 +147,7 @@ class BlogSearchControllerTest {
 
     @DisplayName("[GET /api/search] 블로그 검색 정렬 - 최신순")
     @Test
-    public void givenKeywordAndRecencySortType_whenSearchBlog_thenReturnBlogListSortedByACCURACY() throws Exception {
+    public void givenKeywordAndRecencySortType_whenSearchBlog_thenReturnBlogListSortedByRECENCY() throws Exception {
         // given
         String keyword = "안녕";
         String pageNumber = "1";

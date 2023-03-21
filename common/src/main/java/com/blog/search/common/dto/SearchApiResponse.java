@@ -31,11 +31,10 @@ public class SearchApiResponse {
         return SearchApiResponse.of(documentDto.getTitle(), documentDto.getContents(), documentDto.getUrl(), documentDto.getBlogname()
                 , documentDto.getThumbnail(), createdDate);
     }
-    
+
     public static SearchApiResponse of(ItemDto itemDto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate createdDate = LocalDate.parse(itemDto.getPostdate(), formatter);
-        return SearchApiResponse.of(itemDto.getTitle(), itemDto.getDescription(), itemDto.getLink(),
-                itemDto.getBloggername(), null, createdDate);
+        return SearchApiResponse.of(itemDto.getTitle(), itemDto.getDescription(), itemDto.getLink(), itemDto.getBloggername()
+                , null, LocalDate.parse(itemDto.getPostdate(), formatter));
     }
 }
