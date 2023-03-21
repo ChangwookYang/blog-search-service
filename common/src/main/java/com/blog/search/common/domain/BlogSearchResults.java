@@ -1,7 +1,7 @@
 package com.blog.search.common.domain;
 
 import com.blog.search.common.type.ApiType;
-import com.blog.search.common.type.SearchType;
+import com.blog.search.common.type.SortType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +29,7 @@ public class BlogSearchResults {
     @Setter @Column(nullable = false, columnDefinition = "json")
     private String searchResult;
     @Setter @Column(nullable = false, length = 10) @Enumerated(EnumType.STRING)
-    private SearchType searchType;
+    private SortType sortType;
     @Setter @Column(nullable = false, length = 10) @Enumerated(EnumType.STRING)
     private ApiType apiType;
 
@@ -40,15 +40,15 @@ public class BlogSearchResults {
 
     protected BlogSearchResults() {}
 
-    private BlogSearchResults(String keyword, String searchResult, SearchType searchType, ApiType apiType) {
+    private BlogSearchResults(String keyword, String searchResult, SortType sortType, ApiType apiType) {
         this.keyword = keyword;
         this.searchResult = searchResult;
-        this.searchType = searchType;
+        this.sortType = sortType;
         this.apiType = apiType;
     }
 
-    public static BlogSearchResults of(String keyword, String searchResult, SearchType searchType, ApiType apiType) {
-        return new BlogSearchResults(keyword, searchResult, searchType, apiType);
+    public static BlogSearchResults of(String keyword, String searchResult, SortType sortType, ApiType apiType) {
+        return new BlogSearchResults(keyword, searchResult, sortType, apiType);
     }
 }
 

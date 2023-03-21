@@ -1,10 +1,12 @@
 package com.blog.search.application.service;
 
+import com.blog.search.common.dto.SearchApiRequest;
+import com.blog.search.common.dto.SearchListResponse;
 import com.blog.search.common.service.BlogSearchApiInterface;
 import com.blog.search.common.service.BlogSearchApiServiceFactory;
 import com.blog.search.common.type.ApiType;
+import com.blog.search.common.type.SortType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class BlogSearchService {
 
     @Transactional(readOnly = true)
-    public Object searchBlogs(String keyword, Pageable pageable) throws Exception {
-        BlogSearchApiInterface<?> blogSearchApiService = BlogSearchApiServiceFactory.getService(ApiType.NAVER);
+    public SearchListResponse searchBlogs(String keyword, SortType sortType, int pageNumber, int pageSize) throws Exception {
+        BlogSearchApiInterface<?> blogSearchApiService = BlogSearchApiServiceFactory.getService(ApiType.KAKAO);
 
-        // TODO 에러 발생 시 Naver
-        return blogSearchApiService.searchBlogDataFromApi(keyword);
+        // TODO 에러 발생 시 Naver @Retryable
+        return blogSearchApiService.searchBlogDataFromApi(
+                SearchApiRequest.of(keyword, sortType, pageNumber, pageSize));
     }
 
 }

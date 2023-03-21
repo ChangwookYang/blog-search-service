@@ -1,5 +1,8 @@
 package com.blog.search.common.service;
 
+import com.blog.search.common.dto.SearchApiRequest;
+import com.blog.search.common.dto.SearchApiResponse;
+import com.blog.search.common.dto.SearchListResponse;
 import com.blog.search.common.dto.kakao.KakaoSearchResponse;
 import com.blog.search.common.type.ApiType;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +16,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KakaoSearchApiService implements BlogSearchApiInterface<KakaoSearchResponse>{
+public class KakaoSearchApiService implements BlogSearchApiInterface<KakaoSearchResponse> {
 
     private final RestTemplate restTemplate;
 
@@ -33,21 +37,23 @@ public class KakaoSearchApiService implements BlogSearchApiInterface<KakaoSearch
     }
 
     @Override
-    public KakaoSearchResponse searchBlogDataFromApi(String keyword) {
+    public SearchListResponse searchBlogDataFromApi(SearchApiRequest request) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(kakaoRestApiUrl);
-        uriBuilder.queryParam("query", keyword);
+        uriBuilder.queryParam("query", request.getKeyword());
+        uriBuilder.queryParam("sort", request.getSortType());
+        uriBuilder.queryParam("page", request.getPageNumber() + 1);
+        uriBuilder.queryParam("size", request.getPageSize());
         URI uri = uriBuilder.build().encode().toUri();
-        log.info("keyword : {}, uri : {}", keyword, uri);
+        log.info("keyword : {}, uri : {}", request.getKeyword(), uri);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + kakaoRestApiKey);
-        return restTemplate.exchange(uri, HttpMethod.GET
+        KakaoSearchResponse response = restTemplate.exchange(uri, HttpMethod.GET
                 , new HttpEntity<>(headers), KakaoSearchResponse.class).getBody();
+        return SearchListResponse.of(
+                response.getDocumentList().stream().map(SearchApiResponse::of).collect(Collectors.toList()),
+                response.getMetaDto().getTotalCount(), request.getPageNumber(), request.getPageSize(),
+                response.getMetaDto().getIsEnd(), request.getSortType());
     }
 
-    @Override
-    public KakaoSearchResponse searchBlogDataFromDatabase(String jsonResult) throws Exception {
-
-        return null;
-    }
 }

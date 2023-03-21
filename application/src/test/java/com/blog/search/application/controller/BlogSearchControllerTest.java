@@ -1,5 +1,6 @@
 package com.blog.search.application.controller;
 
+import com.blog.search.common.type.SortType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,7 @@ class BlogSearchControllerTest {
                                 .param("keyword", "안녕")
                                 .param("page", "1")
                                 .param("size", "5")
+                                .param("searchTyp", SortType.ACCURACY.toString())
 //                                .param("sort", "createdDate,desc")
                 )
                 .andExpect(status().isOk());

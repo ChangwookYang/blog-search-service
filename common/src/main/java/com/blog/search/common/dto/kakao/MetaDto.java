@@ -12,4 +12,7 @@ public class MetaDto {
 
     @JsonProperty("total_count")
     private Long totalCount;
+
+    @JsonProperty("is_end")
+    private Boolean isEnd;
 }

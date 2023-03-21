@@ -1,12 +1,11 @@
 package com.blog.search.application.service;
 
+import com.blog.search.common.dto.SearchApiRequest;
 import com.blog.search.common.service.KakaoSearchApiService;
+import com.blog.search.common.type.SortType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class BlogSearchServiceTest {
@@ -15,7 +14,6 @@ class BlogSearchServiceTest {
 
     @Test
     void test() {
-
-        kakaoSearchApiService.searchBlogDataFromApi("안녕");
+        kakaoSearchApiService.searchBlogDataFromApi(SearchApiRequest.of("안녕", SortType.ACCURACY, 1,10));
     }
 }
