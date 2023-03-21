@@ -12,6 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class KakaoSearchResponse {
 
+    @JsonProperty("errorType")
+    private String errorType;
+
     @JsonProperty("meta")
     private MetaDto metaDto;
 

@@ -7,5 +7,5 @@ import com.blog.search.common.type.ApiType;
 public interface BlogSearchApiInterface<T> {
     ApiType getApiTye();
 
-    SearchListResponse searchBlogDataFromApi(SearchApiRequest request);
+    SearchListResponse searchBlogDataFromApi(SearchApiRequest request) throws Exception;
 }

@@ -13,7 +13,7 @@ class BlogSearchServiceTest {
     private KakaoSearchApiService kakaoSearchApiService;
 
     @Test
-    void test() {
+    void test() throws Exception {
         kakaoSearchApiService.searchBlogDataFromApi(SearchApiRequest.of("안녕", SortType.ACCURACY, 1,10));
     }
 }

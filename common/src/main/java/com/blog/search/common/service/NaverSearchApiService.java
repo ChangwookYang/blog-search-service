@@ -4,6 +4,7 @@ import com.blog.search.common.dto.SearchApiRequest;
 import com.blog.search.common.dto.SearchApiResponse;
 import com.blog.search.common.dto.SearchListResponse;
 import com.blog.search.common.dto.naver.NaverSearchResponse;
+import com.blog.search.common.exception.ApiRuntimeException;
 import com.blog.search.common.type.ApiType;
 import com.blog.search.common.type.SortType;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -40,7 +42,7 @@ public class NaverSearchApiService implements BlogSearchApiInterface<SearchListR
     }
 
     @Override
-    public SearchListResponse searchBlogDataFromApi(SearchApiRequest request) {
+    public SearchListResponse searchBlogDataFromApi(SearchApiRequest request) throws Exception {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(naverRestApiUrl);
 
         Integer start = getStart(request.getPageNumber(), request.getPageSize());
@@ -54,14 +56,20 @@ public class NaverSearchApiService implements BlogSearchApiInterface<SearchListR
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", naverRestApiClientId);
         headers.set("X-Naver-Client-Secret", naverRestApiClientSecret);
+        try {
 
-        NaverSearchResponse response = restTemplate.exchange(uri, HttpMethod.GET
-                , new HttpEntity<>(headers), NaverSearchResponse.class).getBody();
-        return SearchListResponse.of(
-                response.getItemList().stream().map(SearchApiResponse::of).collect(Collectors.toList()),
-                response.getTotal(), request.getPageNumber(), request.getPageSize(),
-                isEndPage(response.getTotal(), start, request.getPageSize()), request.getSortType()
-        );
+            NaverSearchResponse response = restTemplate.exchange(uri, HttpMethod.GET
+                    , new HttpEntity<>(headers), NaverSearchResponse.class).getBody();
+            return SearchListResponse.of(
+                    response.getItemList().stream().map(SearchApiResponse::of).collect(Collectors.toList()),
+                    response.getTotal(), request.getPageNumber(), request.getPageSize(),
+                    isEndPage(response.getTotal(), start, request.getPageSize()), request.getSortType()
+            );
+        } catch (HttpClientErrorException ae) {
+            throw new ApiRuntimeException(ae.getStatusCode(), "Naver API 요청값 오류");
+        } catch (Exception e) {
+            throw new Exception("Naver API 에러");
+        }
     }
 
     private String getSort(SortType sortType) {
