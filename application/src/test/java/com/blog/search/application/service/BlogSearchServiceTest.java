@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@DisplayName("블로그 키워드 검색 서비스 테스트")
 @SpringBootTest
 class BlogSearchServiceTest {
     @Autowired

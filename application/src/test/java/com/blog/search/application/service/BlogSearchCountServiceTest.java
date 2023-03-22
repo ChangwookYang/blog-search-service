@@ -16,6 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayName("인기 키워드 조회, 검색 수 카운트 테스트 서비스")
 @SpringBootTest
 class BlogSearchCountServiceTest {
     @Autowired
