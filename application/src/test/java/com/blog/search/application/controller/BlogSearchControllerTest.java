@@ -1,5 +1,8 @@
 package com.blog.search.application.controller;
 
+import com.blog.search.application.dto.KeywordCountResponse;
+import com.blog.search.application.service.BlogSearchCountService;
+import com.blog.search.common.domain.BlogSearchKeywords;
 import com.blog.search.common.type.SortType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -10,10 +13,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,6 +36,9 @@ class BlogSearchControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    BlogSearchCountService blogSearchCountService;
 
     @DisplayName("[GET /api/search] 블로그 검색 - 정상 조회 및 페이징 일치")
     @Test
@@ -193,7 +205,23 @@ class BlogSearchControllerTest {
     @DisplayName("[GET /api/popular] 인기 키워드 검색 - 정상 조회")
     @Test
     public void givenNothing_whenRequestPopular_thenReturnPopularList() throws Exception {
+
+        List<KeywordCountResponse> list = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            list.add(KeywordCountResponse.from(BlogSearchKeywords.of("안녕" + i, 100L + i)));
+        }
+        given(blogSearchCountService.findTop10OrderBySearchCountDesc()).willReturn(list);
+
+        mvc.perform(get("/api/popular")).andExpect(status().isOk());
+    }
+
+
+    @DisplayName("[GET /api/popular] 인기 키워드 검색 - 검색 결과 없음")
+    @Test
+    public void givenNothing_whenRequestPopular_thenReturnEmptyList() throws Exception {
+
+        given(blogSearchCountService.findTop10OrderBySearchCountDesc()).willReturn(Collections.emptyList());
         mvc.perform(get("/api/popular"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

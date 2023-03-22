@@ -18,7 +18,7 @@ class BlogSearchServiceTest {
     @Autowired
     private BlogSearchService blogSearchService;
 
-    @DisplayName("키워드 검색하면, 페이지 사이즈만큼 정상적으로 결과값을 반환한다.")
+    @DisplayName("[블로그 키워드 검색] 키워드 검색하면, 페이지 사이즈만큼 정상적으로 결과값을 반환한다.")
     @Test
     void givenKeywordAndPage_whenSearchBlog_thenReturnsResults() throws Exception {
         // given
@@ -36,7 +36,7 @@ class BlogSearchServiceTest {
         assertEquals(SortType.ACCURACY, response.getSortType());
     }
 
-    @DisplayName("키워드 없이 검색하면, BAD_REQUEST 에러를 반환한다.")
+    @DisplayName("[블로그 키워드 검색] 키워드 없이 검색하면, BAD_REQUEST 에러를 반환한다.")
     @Test
     void givenNothing_whenSearchBlog_thenReturnsBadRequest() throws Exception {
         // given
@@ -50,7 +50,7 @@ class BlogSearchServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, ae.getHttpStatus());
     }
 
-    @DisplayName("키워드 정상 조회 시에 카카오 검색을 통해 결과값을 반환한다.")
+    @DisplayName("[블로그 키워드 검색] 키워드 정상 조회 시에 카카오 검색을 통해 결과값을 반환한다.")
     @Test
     void givenNormalRequest_whenSearchBlog_thenReturnsFromKakao() throws Exception {
         // given
@@ -65,7 +65,7 @@ class BlogSearchServiceTest {
         assertEquals(ApiType.KAKAO, response.getApiType());
     }
 
-    @DisplayName("카카오 검색 에러 시에 네이버 검색을 통하여 결과 반환한다.")
+    @DisplayName("[블로그 키워드 검색] 카카오 검색 에러 시에 네이버 검색을 통하여 결과 반환한다.")
     @Test
     void givenRequest_whenSearchBlogAndKakaoError_thenReturnsFromNaver() throws Exception {
 
