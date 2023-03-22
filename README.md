@@ -6,15 +6,16 @@
 ### 실행문 
 : java -jar blog-search.jar
 
-### API 명세 (jar파일 실행 후 접속)
-: http://localhost:8080/swagger-ui.html
+### API 명세 (jar파일 실행 후 접속) 
+: http://localhost:8080/swagger-ui.html  
+---
 [GET] /api/search 블로그 검색
 <img width="1400" alt="image" src="https://user-images.githubusercontent.com/66955409/226924171-304d809a-dba1-41a1-abd4-51e064e647e8.png">
 
 [GET] /api/popular 인기 검색어 목록
 <img width="1400" alt="image" src="https://user-images.githubusercontent.com/66955409/226924833-e6aab23d-523a-4d92-a99a-bcff90b21d29.png">
 
-
+---
 ### 스펙
   - JAVA 11
   - Spring Boot
@@ -29,7 +30,11 @@
 [Swagger UI 2.9.2] 
 > API 문서 작성  
 
+[Spring retry]
+> 카카오 API 실패 시 Naver API 검색
 
+
+---
 ### 기능 구현
 1. [GET] /api/search 블로그 검색
 
